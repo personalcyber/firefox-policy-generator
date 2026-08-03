@@ -1,0 +1,187 @@
+id: home_user_privacy_proton
+name: Home User - Privacy (Proton)
+description: >-
+  Privacy-hardened profile for home users who prefer the Proton ecosystem over
+  Mozilla's own accounts: Proton Pass for credentials and Proton VPN for
+  network-level protection, both force-installed as browser extensions.
+  Disables telemetry, enforces strict tracking protection and DNS-over-HTTPS,
+  clears data on exit, and ships a curated set of privacy extensions the user
+  can disable individually. Compare with home_user_privacy_accounts, which
+  uses Firefox's built-in Password Manager/Sync and Mozilla VPN instead.
+source: >-
+  Mozilla Firefox Security Hardening Guide, NIST SP 800-53, Mozilla's Privacy & Security
+  Recommendations
+values:
+  # Privacy & Telemetry
+  DisableTelemetry: true
+  DisableFirefoxStudies: true
+  DisableFeedbackCommands: true
+  DisablePocket: true
+
+  # Content Blocking & Tracking Protection
+  Preferences:
+    browser.contentblocking.category:
+      Value: strict
+      Status: locked
+  EnableTrackingProtection:
+    Cryptomining: true
+    Fingerprinting: true
+  SearchSuggestEnabled: false
+  NetworkPrediction: false
+
+  # Network Security
+  SSLVersionMin: tls1.2
+  DNSOverHTTPS:
+    Enabled: true
+  DisabledCiphers:
+    TLS_RSA_WITH_3DES_EDE_CBC_SHA: true
+
+  # Credentials & Sync - use Proton Pass instead of Firefox's own manager/account
+  PasswordManagerEnabled: false
+  DisableFirefoxAccounts: true
+
+  # Data Cleanup
+  SanitizeOnShutdown:
+    Cache: true
+    Cookies: true
+    History: true
+    Sessions: true
+    Locked: true
+
+  # Permissions - block by default, sites can still prompt for camera/mic
+  Permissions:
+    Autoplay:
+      Default: block-audio-video
+    Geolocation:
+      Default: block
+    Notifications:
+      Default: block
+
+  # UI Cleanup
+  UserMessaging:
+    ExtensionRecommendations: false
+    FeatureRecommendations: false
+  FirefoxHome:
+    SponsoredTopSites: false
+    Pocket: false
+    SponsoredPocket: false
+    Snippets: false
+
+  # Extensions - Proton Pass + Proton VPN force-installed, plus a curated
+  # privacy set installed but left enabled/disableable by the user
+  # (installation_mode: normal_installed)
+  InstallAddonsPermission:
+    Default: true
+  ExtensionSettings:
+    "pass@proton.me":
+      installation_mode: force_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/proton-pass/latest.xpi"
+    "vpn@proton.ch":
+      installation_mode: force_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/proton-vpn-firefox-extension/latest.xpi"
+    uBlock0@raymondhill.net:
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
+    jid1-MnnxcxisBPnSXQ@jetpack:
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/privacy-badger17/latest.xpi"
+    CookieAutoDelete@kennydo.com:
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/cookie-autodelete/latest.xpi"
+    "{74145f27-f039-47ce-a470-a662b129930a}":
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/clearurls/latest.xpi"
+    "@testpilot-containers":
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/multi-account-containers/latest.xpi"
+    "{b86e4813-687a-43e6-ab65-0bde4ab75758}":
+      installation_mode: normal_installed
+      install_url: "https://addons.mozilla.org/firefox/downloads/latest/localcdn-fork-of-decentraleyes/latest.xpi"
+
+rules:
+  - id: HU-PRIV-PROTON-1
+    version: "1.0"
+    severity: high
+    policy: DisableTelemetry
+    title: "Disable Mozilla Telemetry"
+    description: >-
+      Firefox sends telemetry data to Mozilla about browsing habits, hardware,
+      and system configuration. Privacy-focused home users should opt out.
+    recommendation: Disable telemetry and studies.
+
+  - id: HU-PRIV-PROTON-2
+    version: "1.0"
+    severity: high
+    policy: EnableTrackingProtection
+    title: "Enable Strong Tracking Protection"
+    description: >-
+      Tracking and fingerprinting enable identification and profiling across sites.
+    recommendation: >-
+      Enable strict tracking protection with fingerprinting and cryptomining
+      prevention.
+
+  - id: HU-PRIV-PROTON-3
+    version: "1.0"
+    severity: medium
+    policy: DNSOverHTTPS
+    title: "Enable DNS-over-HTTPS"
+    description: >-
+      Standard DNS queries are unencrypted, allowing ISPs and network
+      observers to see every domain visited.
+    recommendation: Enable DNS-over-HTTPS to hide browsing from ISPs.
+
+  - id: HU-PRIV-PROTON-4
+    version: "1.0"
+    severity: high
+    policy: SanitizeOnShutdown
+    title: "Clear Browsing Data on Exit"
+    description: >-
+      Cached pages, cookies, and history can be recovered by other users on
+      shared computers or by malware with local access.
+    recommendation: Automatically clear cache, cookies, and history on exit.
+
+  - id: HU-PRIV-PROTON-5
+    version: "1.0"
+    severity: medium
+    policy: PasswordManagerEnabled
+    title: "Use Proton Pass Instead of Firefox's Password Manager"
+    description: >-
+      This profile disables Firefox's built-in Password Manager and Firefox
+      Accounts, and force-installs Proton Pass so credentials are stored in
+      Proton's end-to-end encrypted vault instead.
+    recommendation: >-
+      Sign in to Proton Pass with a Proton Account and migrate saved logins
+      out of Firefox's password store.
+
+  - id: HU-PRIV-PROTON-6
+    version: "1.0"
+    severity: medium
+    policy: ExtensionSettings
+    title: "Force-Install Proton Pass and Proton VPN"
+    description: >-
+      Proton Pass (password manager) and Proton VPN (network-level privacy)
+      are force-installed so the user always has them available and cannot
+      accidentally remove them.
+    recommendation: >-
+      Sign in to both extensions with a Proton Account after first launch.
+    note: >-
+      Extension IDs/URLs for Proton Pass, Proton VPN, and the complementary
+      privacy extensions were not re-verified against AMO from this
+      environment (outbound network to addons.mozilla.org was blocked) -
+      confirm each GUID/install_url still resolves via `ffpolicy`'s AMO
+      lookup or the AMO listing page before relying on this preset in
+      production.
+
+  - id: HU-PRIV-PROTON-7
+    version: "1.0"
+    severity: low
+    policy: ExtensionSettings
+    title: "Install Curated Privacy Extensions"
+    description: >-
+      uBlock Origin, Privacy Badger, Cookie AutoDelete, ClearURLs, Firefox
+      Multi-Account Containers, and LocalCDN are installed automatically to
+      give a strong default privacy posture, but left as normal_installed so
+      the user may disable or remove any of them.
+    recommendation: >-
+      Review the installed extension set and disable any that conflict with
+      sites you rely on.
