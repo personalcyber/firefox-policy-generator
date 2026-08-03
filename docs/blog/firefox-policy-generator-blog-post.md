@@ -44,6 +44,14 @@ always a manual fallback, so a flaky network never leaves you stuck.
 
 ![The Extension Settings manager: search AMO, paste a listing link, or add an extension manually](./ffpolicy-extension-manager.png)
 
+For a one-off local install, the GUI's **File → Export to standard location…** dialog picks
+the right path for you — every standard Linux install location Firefox reads from (the
+system-wide directory, the per-distro `distribution/` folder, the snap, the Flatpak extension
+mount point, or a custom path) — and flags whether the write needs elevated privileges, with a
+one-click retry via `pkexec`/`sudo` if it does.
+
+![The export target dialog resolving the write path and privilege requirement for a chosen target](./ffpolicy-export-dialog.png)
+
 Don't want to build a policy set from scratch? `ffpolicy` ships **compliance presets** —
 DISA STIG, NIST SP 800-171, and a couple of balanced/privacy-focused home-user baselines — that
 apply a known-good starting point in one click (or one `--preset` flag), which you then layer
