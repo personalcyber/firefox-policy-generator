@@ -85,19 +85,42 @@ Input files are YAML or JSON, either a bare `policy-name: value` mapping or a
 `{firefox_version, policies}` wrapper - see `tests/fixtures/sample_input.yaml`.
 Pass `--offline` to skip the live Mozilla schema sync and use the bundled fallback.
 
-### Compliance presets
+### Presets (Compliance & Privacy)
 
 Bundled presets apply a known-good baseline in one step, then let you layer
-your own settings on top. See [`docs/DISA_STIG.md`](docs/DISA_STIG.md) for the
-DISA STIG (Mozilla Firefox) presets, one per compliance profile:
+your own settings on top. Four preset families ship by default:
+
+**DISA STIG** — Government hardening standard (9 Mission Assurance Category profiles)
+```bash
+python -m ffpolicy preset-info disa_stig__mac_1_classified   # every rule's description
+python -m ffpolicy generate --preset disa_stig__mac_1_classified -o policies.json
+```
+See [`docs/DISA_STIG.md`](docs/DISA_STIG.md) for details.
+
+**NIST SP 800-171** — Controlled Unclassified Information (2 profiles: base + high)
+```bash
+python -m ffpolicy generate --preset nist_sp_800_171 -o policies.json
+```
+See [`docs/NIST_SP_800_171.md`](docs/NIST_SP_800_171.md) for details.
+
+**Home User** — Balanced security/usability for individuals (Strict/Balanced/Relaxed)
+```bash
+python -m ffpolicy generate --preset home_user_balanced -o policies.json
+```
+See [`docs/HOME_USER_SECURITY.md`](docs/HOME_USER_SECURITY.md) for details.
+
+**Home User Privacy** — Privacy-focused with credential/VPN provider choice (2 profiles)
+```bash
+python -m ffpolicy generate --preset home_user_privacy_accounts -o policies.json  # Firefox Accounts + Mozilla VPN
+python -m ffpolicy generate --preset home_user_privacy_proton -o policies.json    # Proton Pass + Proton VPN
+```
+See [`docs/HOME_USER_SECURITY.md`](docs/HOME_USER_SECURITY.md#privacy-focused-presets-proton--firefox-accounts) for details.
+
+List all presets and apply one from the GUI's Presets menu:
 
 ```bash
-python -m ffpolicy presets                                  # list what's available
-python -m ffpolicy preset-info disa_stig__mac_1_classified   # every rule's description + recommendation
-python -m ffpolicy generate --preset disa_stig__mac_1_classified -o policies.json --offline
+python -m ffpolicy presets                   # list all available presets
 ```
-
-or apply one from the GUI's Presets menu.
 
 ### GUI features
 

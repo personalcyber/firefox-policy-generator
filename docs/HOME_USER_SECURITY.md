@@ -443,6 +443,99 @@ A: Visit https://coveryourtracks.eff.org - it reports how resistant you are to f
 **Q: Can I update the profile later?**
 A: Yes. Generate a new policies.json anytime, then re-export. Firefox will apply updated settings on next restart.
 
+## Privacy-Focused Presets (Proton & Firefox Accounts)
+
+In addition to the Strict/Balanced/Relaxed profiles above, two specialized privacy presets focus on high-privacy configurations with choice in credential and VPN providers:
+
+### home_user_privacy_accounts
+
+**Recommended For**:
+- Users preferring Mozilla's ecosystem (Firefox Accounts, Firefox Sync)
+- Those who want built-in password manager with cross-device sync
+- Users willing to install system VPN separately (Mozilla VPN as desktop app)
+
+**Key Features**:
+- **Credentials**: Firefox's built-in Password Manager + Firefox Accounts/Sync (end-to-end encrypted vault)
+- **VPN**: Recommend Mozilla VPN as separate system app (not a browser extension)
+- **Privacy Core**: Telemetry off, strict tracking protection, DNS-over-HTTPS, sanitize-on-shutdown
+- **Extensions**: uBlock Origin, Privacy Badger, Cookie AutoDelete, ClearURLs, Multi-Account Containers, LocalCDN (all normal_installed, user-disableable)
+
+**Command Line Usage**:
+
+```bash
+python -m ffpolicy generate --preset home_user_privacy_accounts -o policies.json
+python -m ffpolicy export --preset home_user_privacy_accounts --target system_linux
+```
+
+**Trade-offs**:
+- Requires Firefox Account sign-up for Sync
+- Mozilla VPN is a separate application (not enforced via policies.json)
+- Relies on Mozilla's privacy practices
+
+### home_user_privacy_proton
+
+**Recommended For**:
+- Users preferring the Proton ecosystem (Proton Pass, Proton VPN)
+- Those who want zero-knowledge password management outside Mozilla's control
+- Users wanting integrated network-level VPN (Proton VPN extension)
+
+**Key Features**:
+- **Credentials**: Proton Pass (force-installed, end-to-end encrypted vault)
+- **VPN**: Proton VPN (force-installed extension for network-level privacy)
+- **Privacy Core**: Telemetry off, strict tracking protection, DNS-over-HTTPS, sanitize-on-shutdown
+- **Extensions**: uBlock Origin, Privacy Badger, Cookie AutoDelete, ClearURLs, Multi-Account Containers, LocalCDN (all normal_installed, user-disableable)
+- **Firefox Accounts/Password Manager**: Disabled (Proton Pass is the primary credential store)
+
+**Command Line Usage**:
+
+```bash
+python -m ffpolicy generate --preset home_user_privacy_proton -o policies.json
+python -m ffpolicy export --preset home_user_privacy_proton --target system_linux
+```
+
+**Trade-offs**:
+- Requires Proton Account sign-up
+- Disables Firefox's built-in password manager
+- Force-installs Proton extensions (users can disable but not remove)
+- Depends on Proton's infrastructure outside Mozilla
+
+### Comparing Privacy Presets
+
+| Feature | Accounts | Proton |
+|---------|----------|--------|
+| Password Manager | Firefox (built-in) | Proton Pass (force-installed) |
+| Sync | Firefox Accounts + Sync | Proton ecosystem only |
+| VPN | Mozilla VPN (separate app) | Proton VPN (extension) |
+| Firefox Accounts | Enabled | Disabled |
+| Complementary Extensions | 6 normal_installed | 6 normal_installed |
+| Telemetry | Disabled | Disabled |
+| Tracking Protection | Strict | Strict |
+| DNS-over-HTTPS | Enabled | Enabled |
+| Sanitize on Shutdown | All data | All data |
+| **Best For** | Mozilla ecosystem users | Proton ecosystem users |
+| **Primary Trust Model** | Mozilla | Proton |
+
+### Which Privacy Preset to Choose?
+
+**Choose `home_user_privacy_accounts` if you**:
+- Already use Firefox Accounts / Firefox Sync
+- Are comfortable with Mozilla handling encryption keys
+- Prefer native Firefox features over third-party extensions
+- Want to install VPN at the OS level (better security/performance than extension)
+
+**Choose `home_user_privacy_proton` if you**:
+- Already use Proton Mail / Proton Drive / Proton Calendar
+- Prefer Proton's zero-knowledge architecture
+- Want VPN integrated directly in the browser
+- Want to avoid Mozilla Accounts entirely
+
+**Choose `home_user_strict` (from earlier profiles) if you**:
+- Prioritize maximum security over convenience
+- Are willing to use external credential managers (Bitwarden, etc.)
+- Don't want force-installed extensions
+- Handle sensitive information requiring the highest protection
+
 ## Version History
 
+- **v1.1** (2026-08-03): Added privacy-focused presets (home_user_privacy_accounts, home_user_privacy_proton)
 - **v1.0** (2026-07-23): Initial Home User Security profiles (Strict, Balanced, Relaxed)
