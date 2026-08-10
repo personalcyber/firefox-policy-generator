@@ -6,6 +6,25 @@ self-contained Linux AppImage.
 
 See [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) for the full design.
 
+Read more about the project in the blog post: [Firefox Policy Generator: one source of
+truth for policies.json, from your desktop to your fleet](docs/blog/firefox-policy-generator-blog-post.md).
+
+## Screenshots
+
+The GUI's category tree, policy editor, and live JSON preview:
+
+![Firefox Policy Generator main window — category tree, policy editor, and live JSON preview](docs/blog/ffpolicy-main-window.png)
+
+The dedicated `ExtensionSettings` manager — search AMO, paste an addons.mozilla.org
+listing link, or add an extension manually:
+
+![The Extension Settings manager: search AMO, paste a listing link, or add an extension manually](docs/blog/ffpolicy-extension-manager.png)
+
+Validating, generating, and exporting a policy set from the CLI — the same commands a
+playbook or manifest would run:
+
+![Validating, generating, and exporting a policy set from the CLI](docs/blog/ffpolicy-cli-ansible.png)
+
 ## Install
 
 ```bash
