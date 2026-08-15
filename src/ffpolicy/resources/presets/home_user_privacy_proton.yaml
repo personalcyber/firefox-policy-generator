@@ -28,6 +28,8 @@ values:
     Fingerprinting: true
   SearchSuggestEnabled: false
   NetworkPrediction: false
+  SearchEngines:
+    Default: DuckDuckGo
 
   # Network Security
   SSLVersionMin: tls1.2
@@ -178,6 +180,18 @@ rules:
       source is not public) - confirm each GUID/install_url still resolves
       via `ffpolicy`'s AMO lookup or the AMO listing page before relying on
       this preset in production.
+
+  - id: HU-PRIV-PROTON-8
+    version: "1.0"
+    severity: low
+    policy: SearchEngines
+    title: "Set DuckDuckGo as the Default Search Engine"
+    description: >-
+      Firefox's default search engine varies by region/build and may send
+      search queries to providers that build advertising profiles from them.
+    recommendation: >-
+      Set DuckDuckGo, a built-in search engine that does not track queries
+      or build user profiles, as the default.
 
   - id: HU-PRIV-PROTON-7
     version: "1.0"
