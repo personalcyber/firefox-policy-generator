@@ -73,7 +73,7 @@ values:
   InstallAddonsPermission:
     Default: true
   ExtensionSettings:
-    "pass@proton.me":
+    "78272b6fa58f4a1abaac99321d503a20@proton.me":
       installation_mode: force_installed
       install_url: "https://addons.mozilla.org/firefox/downloads/latest/proton-pass/latest.xpi"
     "vpn@proton.ch":
@@ -165,12 +165,19 @@ rules:
     recommendation: >-
       Sign in to both extensions with a Proton Account after first launch.
     note: >-
-      Extension IDs/URLs for Proton Pass, Proton VPN, and the complementary
-      privacy extensions were not re-verified against AMO from this
-      environment (outbound network to addons.mozilla.org was blocked) -
-      confirm each GUID/install_url still resolves via `ffpolicy`'s AMO
-      lookup or the AMO listing page before relying on this preset in
-      production.
+      The Proton Pass GUID was previously wrong ("pass@proton.me"), which
+      silently broke force-installation: Firefox matches ExtensionSettings
+      entries against the add-on's actual manifest GUID, not the install_url,
+      so a mismatched key is simply ignored rather than erroring. Corrected
+      to "78272b6fa58f4a1abaac99321d503a20@proton.me", verified against
+      Proton Pass's manifest-firefox.json in the ProtonMail/WebClients
+      repository (applications/pass-extension). The Proton VPN GUID
+      ("vpn@proton.ch") and the complementary privacy extension GUIDs were
+      not re-verified against AMO from this environment (outbound network to
+      addons.mozilla.org was blocked, and Proton VPN's current extension
+      source is not public) - confirm each GUID/install_url still resolves
+      via `ffpolicy`'s AMO lookup or the AMO listing page before relying on
+      this preset in production.
 
   - id: HU-PRIV-PROTON-7
     version: "1.0"
