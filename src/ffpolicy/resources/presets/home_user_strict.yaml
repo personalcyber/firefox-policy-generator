@@ -20,11 +20,16 @@ values:
     browser.contentblocking.category:
       Value: strict
       Status: locked
+    security.default_personal_cert:
+      Value: Ask Every Time
+      Status: locked
   EnableTrackingProtection:
     Cryptomining: true
     Fingerprinting: true
   SearchSuggestEnabled: false
   NetworkPrediction: false
+  SearchEngines:
+    Default: DuckDuckGo
 
   # Network Security
   SSLVersionMin: tls1.2
@@ -35,10 +40,6 @@ values:
 
   # Credentials - Strict: no password manager
   PasswordManagerEnabled: false
-  Preferences:
-    security.default_personal_cert:
-      Value: Ask Every Time
-      Status: locked
 
   # Extensions - Strict: no user installation
   ExtensionSettings:
@@ -164,3 +165,15 @@ rules:
       Strict profile disables password manager to require external
       credential management systems.
     recommendation: Use organization-approved password managers.
+
+  - id: HU-SECURITY-6
+    version: "1.0"
+    severity: low
+    policy: SearchEngines
+    title: "Set DuckDuckGo as the Default Search Engine"
+    description: >-
+      Firefox's default search engine varies by region/build and may send
+      search queries to providers that build advertising profiles from them.
+    recommendation: >-
+      Set DuckDuckGo, a built-in search engine that does not track queries
+      or build user profiles, as the default.
